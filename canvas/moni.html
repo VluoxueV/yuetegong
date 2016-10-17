@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<style>
+	*{
+		margin: 0;
+		padding: 0px;
+	}
+	canvas{
+		border:1px solid #cdcdcd;
+		width: 100%;
+		max-width: 400px;
+		/*cursor: Crosshair;*/
+	}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<canvas id="canvas1" width="400" height="400">
+			版本太低不兼容
+		</canvas>
+		在空格中绘画你的图像
+
+		
+	</div>
+	<canvas id="canvas2" width="400" height="400"></canvas>
+		<img src="http://192.168.1.222:94/UploadNews/09/30/6361084680365274692031505.jpg" alt="" id="img12">
+	<script src="jquery-1.10.1.min.js"></script>
+	<script>
+		// var canvas=$("#canvas")[0];
+		// var ctx=canvas.getContext("2d");
+   		
+             var canvas = document.getElementById("canvas");
+            
+             var ctx = canvas.getContext('2d');
+            
+             var starteventx,starteventy,moveeventx,moveeventy,endeventx,endeventy;
+
+             var bianhua="#f00";
+
+             $("#canvas").on("mousedown",function(event){
+             	var event=event||window.event;
+             	ctx.beginPath();
+             	var oleft=$("#canvas").offset().left;
+             	var otop=$("#canvas").offset().top;
+	         	starteventx=event.clientX-oleft;
+	         	starteventy=event.clientY-otop;
+	         	console.log(starteventx+":"+starteventy);
+	         	ctx.moveTo(starteventx,starteventy);
+	         	$("#canvas")[0].onmousemove=function(event){
+	         		var event=event||window.event;
+	         		
+	         		ctx.strokeStyle=bianhua;
+	         		moveeventx=event.clientX;
+	         		moveeventy=event.clientY;
+	         		ctx.lineTo(moveeventx,moveeventy);
+	         		ctx.stroke();
+
+	         	};
+	         	$(document).on("mouseup",function(){
+	         		ctx.closePath();
+	         		$("#canvas")[0].onmousemove=null;
+	         	})
+             });
+             var imgage=$("#img12")[0],
+             function createGSCanvas(img) {
+
+			    var canvas=document.createElement("canvas12");
+			    canvas.width=img.width;
+			    canvas.height=img.height;
+			    var ctx=canvas.getContext("2d");
+			    ctx.drawImage(img,0,0);
+			    
+			    var c = ctx.getImageData(0, 0, img.width, img.height); 
+			    for (i=0; i<c.height; i++) {
+			        for (j=0; j<c.width; j++) {
+			            var x = (i*4) * c.width + (j*4);
+			            var r = c.data[x]; 
+			            var g = c.data[x+1]; 
+			            var b = c.data[x+2]; 
+			            c.data[x] = c.data[x+1] = c.data[x+2] = (r+g+b)/3;
+			        }
+			    }
+			    ctx.putImageData(c,0,0,0,0, c.width, c.height);
+			    return canvas.toDataURL();
+			}
+			createGSCanvas(imgage);
+	</script>
+</body>
+</html>
